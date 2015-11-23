@@ -54,10 +54,10 @@ wait
 
 #if [ $file1lines -ne $file2lines ]; then echo "Unequal lines in file1 and file2"; exit 1; fi
 if [[ $useramdisk -eq 1 && -d /ramdisk ]]; then
-	tempdir1=$(mktemp -d /ramdisk/tmp.XXXXXX)
-	tempdir2=$(mktemp -d /ramdisk/tmp.XXXXXX)
-	tempdir3=$(mktemp -d /ramdisk/tmp.XXXXXX)
-	tempdir4=$(mktemp -d /ramdisk/tmp.XXXXXX)
+	tempdir1=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
+	tempdir2=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
+	tempdir3=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
+	tempdir4=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
 else
 	tempdir1=$(mktemp -d)
 	tempdir2=$(mktemp -d)
