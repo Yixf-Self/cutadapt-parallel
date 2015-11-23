@@ -84,7 +84,7 @@ cat $tempdir4/* > $file2out
 
 wait
 
-
+rm -rf $tempdir1 $tempdir2 $tempdir3 $tempdir4
 
 
 
