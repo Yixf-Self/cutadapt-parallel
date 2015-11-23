@@ -1,6 +1,13 @@
 #!/bin/bash
 #
-# Author CLint Paden  2015-11-09
+# THis is a basic script to parallelize your cutadapt jobs. Nothing too fancy.
+# Read more at https://github.com/donutbrew/cutadapt-parallel
+# 
+# I DID NOT WRITE cutadapt. It is available at https://github.com/marcelm/cutadapt/
+# 
+# Author Clint Paden  2015-11-09
+
+trap 'echo Killing jobs...; kill $(jobs -p)' SIGINT
 
 ramdiskname="/ramdisk"
 
@@ -48,17 +55,23 @@ else
 fi
 done
 
+if [[ ! "$copts" =~ " -f " ]] ; then
+	if [[ $file2 =~ "fastq" || $file2 =~ ".fq" ]]; then copts="-f fastq $copts"
+	elif [[  $file2 =~ "fasta" || $file2 =~ ".fa" ]]; then copts="-f fasta $copts"
+	fi
+fi
+
 file1lines=$(cat $file1|wc -l) 
-#file2lines=$(cat $file2|wc -l)
 wait
 
-#if [ $file1lines -ne $file2lines ]; then echo "Unequal lines in file1 and file2"; exit 1; fi
-if [[ $useramdisk -eq 1 && -d /ramdisk ]]; then
-	tempdir1=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
-	tempdir2=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
-	tempdir3=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
-	tempdir4=$(mktemp -d /$ramdiskname/tmp.XXXXXX)
+if [[ $useramdisk -eq 1 && -d $ramdiskname ]]; then
+	echo "Using $ramdiskname as temp location" >&2
+	tempdir1=$(mktemp -d $ramdiskname/tmp.XXXXXX)
+	tempdir2=$(mktemp -d $ramdiskname/tmp.XXXXXX)
+	tempdir3=$(mktemp -d $ramdiskname/tmp.XXXXXX)
+	tempdir4=$(mktemp -d $ramdiskname/tmp.XXXXXX)
 else
+	echo "Using disk as temporary location" >&2
 	tempdir1=$(mktemp -d)
 	tempdir2=$(mktemp -d)
 	tempdir3=$(mktemp -d)
