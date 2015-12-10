@@ -5,9 +5,9 @@
 # 
 # I DID NOT WRITE cutadapt. It is available at https://github.com/marcelm/cutadapt/
 # 
-# Author Clint Paden  2015-11-09
+# Author Clint Paden  2015-11-09. Modified 2015-12-10
 
-trap 'echo Killing jobs...; kill $(jobs -p)' SIGINT
+trap 'cleanup' EXIT
 
 ramdiskname="/ramdisk"
 
@@ -15,6 +15,11 @@ copts=" "
 file1=""
 file2=""
 useramdisk=0
+
+cleanup () {
+	kill $(jobs -p)
+	rm -rf $tempdir1 $tempdir2 $tempdir3 $tempdir4
+}
 
 while [ "${1+x}" ]; do 
 if [ "$1" == "--threads" ] ; then
